@@ -206,6 +206,11 @@ def add_task(task_name: str) -> str:
     cleaned_name = str(task_name).strip()
 
     file_exists = os.path.exists(TODO_FILE)
+    TODO_FILE.parent.mkdir(parents=True, exist_ok=True) # Ensure directory is present
+
+    if not TODO_FILE.exists():
+        TODO_FILE.touch() # Makes empty csv file
+
     with open(TODO_FILE, "a", encoding="utf-8", newline="") as file:
         writer = csv.writer(file)
         if not file_exists or os.path.getsize(TODO_FILE) == 0:
@@ -246,7 +251,7 @@ def update_task_status(task_name: str, status: str) -> str:
             "Allowed values are: pending, in_progress, completed."
         )
 
-    if not os.path.exists(TODO_FILE):
+    if not TODO_FILE.exists():
         return f'Task not found: "{task_name}"'
 
     with open(TODO_FILE, "r", encoding="utf-8", newline="") as file:
@@ -377,6 +382,10 @@ def book_flight(destination: str, date: str, time: str) -> str:
     status = "CONFIRMED"
 
     file_exists = os.path.exists(FLIGHTS_FILE)
+    FLIGHTS_FILE.parent.mkdir(parents=True, exist_ok=True)
+    if not file_exists:
+        FLIGHTS_FILE.touch()
+
     with open(FLIGHTS_FILE, "a", encoding="utf-8", newline="") as file:
         writer = csv.writer(file)
         if not file_exists or os.path.getsize(FLIGHTS_FILE) == 0:
@@ -456,6 +465,10 @@ def place_order(items: list[dict]) -> str:
     items_json = json.dumps(cleaned_items)
 
     file_exists = os.path.exists(ORDERS_FILE)
+    ORDERS_FILE.parent.mkdir(parents=True, exist_ok=True)
+    if not file_exists:
+        ORDERS_FILE.touch()
+        
     with open(ORDERS_FILE, "a", encoding="utf-8", newline="") as file:
         writer = csv.writer(file)
         if not file_exists or os.path.getsize(ORDERS_FILE) == 0:
